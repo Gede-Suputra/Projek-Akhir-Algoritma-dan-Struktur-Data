@@ -1,57 +1,101 @@
 import tkinter as tk
+
 from logic.authentication import login
 from gui.dashboard import gui_dashboard
+from gui.theme import (
+    PRIMARY,
+    PRIMARY_DARK,
+    CARD_BG,
+    TEXT_DARK,
+    TEXT_MUTED,
+    TEXT_WHITE,
+    DANGER,
+    BORDER,
+    font,
+    add_hover,
+    styled_entry
+)
 
 
 def gui_login():
     window = tk.Tk()
-    window.title("Login")
-    center_window(window, 400, 300)
+    window.title("Login - Data Mahasiswa")
+    center_window(window, 420, 480)
     window.resizable(False, False)
+    window.configure(bg=PRIMARY)
+
+    card = tk.Frame(
+        window,
+        bg=CARD_BG,
+        highlightbackground=BORDER,
+        highlightthickness=0
+    )
+    card.place(relx=0.5, rely=0.5, anchor="center", width=340, height=400)
+
+    logo = tk.Label(
+        card,
+        text="🎓",
+        font=("Segoe UI Emoji", 36),
+        bg=CARD_BG
+    )
+    logo.pack(pady=(35, 5))
 
     title = tk.Label(
-        window,
-        text="LOGIN",
-        font=("Arial", 24, "bold")
+        card,
+        text="Selamat Datang",
+        font=font(18, "bold"),
+        bg=CARD_BG,
+        fg=TEXT_DARK
     )
-    title.pack(pady=20)
+    title.pack()
+
+    subtitle = tk.Label(
+        card,
+        text="Masuk untuk melanjutkan",
+        font=font(10),
+        bg=CARD_BG,
+        fg=TEXT_MUTED
+    )
+    subtitle.pack(pady=(0, 25))
 
     username_label = tk.Label(
-        window,
-        text="Username"
+        card,
+        text="Username",
+        font=font(9, "bold"),
+        bg=CARD_BG,
+        fg=TEXT_MUTED,
+        anchor="w"
     )
-    username_label.pack()
+    username_label.pack(fill="x", padx=40)
 
-    username_entry = tk.Entry(
-        window,
-        width=25,
-        font=("Arial", 14)
-    )
-    username_entry.pack(pady=5)
+    username_entry = styled_entry(card, width=28, size=11)
+    username_entry.pack(pady=(5, 15), padx=40, ipady=5)
 
     password_label = tk.Label(
-        window,
-        text="Password"
+        card,
+        text="Password",
+        font=font(9, "bold"),
+        bg=CARD_BG,
+        fg=TEXT_MUTED,
+        anchor="w"
     )
-    password_label.pack(pady=(10, 0))
+    password_label.pack(fill="x", padx=40)
 
-    password_entry = tk.Entry(
-        window,
-        width=25,
-        font=("Arial", 14),
-        show="*"
-    )
-    password_entry.pack(pady=5)
+    password_entry = styled_entry(card, width=28, size=11)
+    password_entry.config(show="•")
+    password_entry.pack(pady=(5, 10), padx=40, ipady=5)
 
     message_label = tk.Label(
-        window,
+        card,
         text="",
-        font=("Arial", 10),
-        fg="red"
+        font=font(9),
+        bg=CARD_BG,
+        fg=DANGER,
+        wraplength=280
     )
-    message_label.pack()
+    message_label.pack(pady=(0, 5))
 
-    def get_login():
+    def get_login(event=None):
         username = username_entry.get()
         password = password_entry.get()
 
@@ -64,16 +108,24 @@ def gui_login():
             gui_dashboard()
 
     login_button = tk.Button(
-        window,
+        card,
         text="Login",
         width=25,
-        bg="#2196F3",
-        fg="white",
-        activebackground="#2196F3",
-        activeforeground="white",
+        bg=PRIMARY,
+        fg=TEXT_WHITE,
+        activebackground=PRIMARY_DARK,
+        activeforeground=TEXT_WHITE,
+        relief="flat",
+        bd=0,
+        cursor="hand2",
+        font=font(11, "bold"),
         command=get_login
     )
-    login_button.pack(pady=20)
+    login_button.pack(pady=15, ipady=6)
+    add_hover(login_button, PRIMARY, PRIMARY_DARK)
+
+    window.bind("<Return>", get_login)
+    username_entry.focus()
 
     window.mainloop()
 

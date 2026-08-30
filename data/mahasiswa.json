@@ -1,40 +1,67 @@
 {
     "mahasiswa": [
         {
+            "nim": "2601001",
             "nama": "Andi Saputra",
             "kelas": "A",
             "jurusan": "Sistem Informasi",
             "ipk": 3.75
         },
         {
+            "nim": "2601002",
             "nama": "Budi Pratama",
             "kelas": "B",
             "jurusan": "Teknik Informatika",
             "ipk": 3.42
         },
         {
+            "nim": "2601003",
             "nama": "Citra Dewi",
             "kelas": "A",
             "jurusan": "Bisnis Digital",
             "ipk": 3.88
         },
         {
+            "nim": "2601004",
             "nama": "Dimas Arya",
             "kelas": "C",
             "jurusan": "Sistem Informasi",
             "ipk": 3.56
         },
         {
+            "nim": "2601005",
             "nama": "Eka Putri",
             "kelas": "B",
             "jurusan": "Teknik Informatika",
             "ipk": 3.91
         },
         {
+            "nim": "2601006",
             "nama": "sdadasd",
             "kelas": "B",
             "jurusan": "Teknik Informatika",
             "ipk": 4.0
+        },
+        {
+            "nim": "1313123",
+            "nama": "dasad",
+            "kelas": "B",
+            "jurusan": "Teknik Informatika",
+            "ipk": 4.0
+        },
+        {
+            "nim": "12312313",
+            "nama": "dasdad",
+            "kelas": "B",
+            "jurusan": "Teknik Informatika",
+            "ipk": 3.0
+        },
+        {
+            "nim": "212313",
+            "nama": "sdadad",
+            "kelas": "B",
+            "jurusan": "Teknik Informatika",
+            "ipk": 3.0
         }
     ]
 }

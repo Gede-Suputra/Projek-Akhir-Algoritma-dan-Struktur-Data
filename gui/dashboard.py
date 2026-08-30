@@ -1,435 +1,161 @@
 import tkinter as tk
-from tkinter import ttk
-import json
 
-from logic.inputData import add_mahasiswa
+from gui.input import gui_input_data
+from gui.show import gui_show_data
+from gui.theme import (
+    SIDEBAR_BG,
+    SIDEBAR_HOVER,
+    SIDEBAR_ACTIVE,
+    BG_LIGHT,
+    TEXT_WHITE,
+    TEXT_MUTED,
+    DANGER,
+    DANGER_DARK,
+    font,
+    add_hover,
+    setup_ttk_style
+)
+
 
 def gui_dashboard():
     window = tk.Tk()
-    window.title("Dashboard")
-    center_window(window, 1000, 600)
+    window.title("Dashboard - Data Mahasiswa")
+    center_window(window, 1050, 640)
     window.resizable(False, False)
+    window.configure(bg=BG_LIGHT)
+
+    setup_ttk_style()
 
     sidebar = tk.Frame(
         window,
-        width=220,
-        bg="#2196F3"
+        width=230,
+        bg=SIDEBAR_BG
     )
     sidebar.pack(side="left", fill="y")
     sidebar.pack_propagate(False)
 
     content = tk.Frame(
         window,
-        bg="white"
+        bg=BG_LIGHT
     )
     content.pack(side="right", fill="both", expand=True)
 
-    title = tk.Label(
-        sidebar,
-        text="DASHBOARD",
-        font=("Arial", 20, "bold"),
-        bg="#2196F3",
-        fg="white"
+    # ==================== SIDEBAR HEADER ====================
+
+    header_frame = tk.Frame(sidebar, bg=SIDEBAR_BG)
+    header_frame.pack(pady=(35, 15), fill="x")
+
+    logo = tk.Label(
+        header_frame,
+        text="🎓",
+        font=("Segoe UI Emoji", 30),
+        bg=SIDEBAR_BG,
+        fg=TEXT_WHITE
     )
-    title.pack(pady=30)
+    logo.pack()
+
+    title = tk.Label(
+        header_frame,
+        text="DASHBOARD",
+        font=font(17, "bold"),
+        bg=SIDEBAR_BG,
+        fg=TEXT_WHITE
+    )
+    title.pack(pady=(6, 0))
+
+    subtitle = tk.Label(
+        header_frame,
+        text="Data Mahasiswa",
+        font=font(9),
+        bg=SIDEBAR_BG,
+        fg=TEXT_MUTED
+    )
+    subtitle.pack()
+
+    separator = tk.Frame(sidebar, bg=SIDEBAR_HOVER, height=1)
+    separator.pack(fill="x", padx=20, pady=15)
+
+    # ==================== CONTENT SWITCHING ====================
 
     def clear_content():
         for widget in content.winfo_children():
             widget.destroy()
 
+    menu_buttons = {}
+
+    def set_active(name):
+        for key, btn in menu_buttons.items():
+            btn.config(bg=SIDEBAR_ACTIVE if key == name else SIDEBAR_BG)
+
+    def show_input():
+        clear_content()
+        set_active("input")
+        gui_input_data(content)
+
     def show_data():
         clear_content()
+        set_active("data")
+        gui_show_data(content, center_window)
 
-        title = tk.Label(
-            content,
-            text="DATA MAHASISWA",
-            font=("Arial", 22, "bold"),
-            fg="black",
-            bg="white"
-        )
-        title.pack(pady=(25, 15))
-
-        filter_frame = tk.Frame(
-            content,
-            bg="white"
-        )
-        filter_frame.pack(pady=10)
-
-        tk.Label(
-            filter_frame,
-            text="Urutan:",
-            bg="white",
-            fg="black"
-        ).grid(row=0, column=0, padx=5)
-
-        order_combo = ttk.Combobox(
-            filter_frame,
-            values=[
-                "Ascending (A-Z)",
-                "Descending (Z-A)"
-            ],
-            state="readonly",
-            width=20
-        )
-        order_combo.current(0)
-        order_combo.grid(row=0, column=1, padx=5)
-
-        tk.Label(
-            filter_frame,
-            text="Berdasarkan:",
-            bg="white",
-            fg="black"
-        ).grid(row=0, column=2, padx=5)
-
-        sort_combo = ttk.Combobox(
-            filter_frame,
-            values=[
-                "Nama",
-                "Kelas",
-                "Jurusan",
-                "IPK"
-            ],
-            state="readonly",
-            width=15
-        )
-        sort_combo.current(0)
-        sort_combo.grid(row=0, column=3, padx=5)
-
-        sort_button = tk.Button(
-            filter_frame,
-            text="Sort",
-            width=10,
-            bg="#2196F3",
-            fg="white",
-            activebackground="#2196F3",
-            activeforeground="white"
-        )
-        sort_button.grid(row=0, column=4, padx=10)
-
-        search_entry = tk.Entry(
-            filter_frame,
-            width=20,
-            font=("Arial", 10)
-        )
-        search_entry.grid(
-            row=1,
-            column=0,
-            columnspan=3,
-            pady=15
-        )
-
-        search_button = tk.Button(
-            filter_frame,
-            text="Search",
-            width=10,
-            bg="#2196F3",
-            fg="white",
-            activebackground="#2196F3",
-            activeforeground="white"
-        )
-        search_button.grid(
-            row=1,
-            column=3,
-            padx=10
-        )
-
-        table_frame = tk.Frame(content)
-        table_frame.pack(
-            padx=20,
-            pady=10
-        )
-
-        columns = (
-            "nama",
-            "kelas",
-            "jurusan",
-            "ipk"
-        )
-
-        table = ttk.Treeview(
-            table_frame,
-            columns=columns,
-            show="headings",
-            height=13
-        )
-
-        table.heading(
-            "nama",
-            text="Nama"
-        )
-
-        table.heading(
-            "kelas",
-            text="Kelas"
-        )
-
-        table.heading(
-            "jurusan",
-            text="Jurusan"
-        )
-
-        table.heading(
-            "ipk",
-            text="IPK"
-        )
-
-        table.column(
-            "nama",
-            width=180
-        )
-
-        table.column(
-            "kelas",
-            width=80
-        )
-
-        table.column(
-            "jurusan",
-            width=250
-        )
-
-        table.column(
-            "ipk",
-            width=80
-        )
-
-        table.pack()
-
-        with open("data/mahasiswa.json", "r") as file:
-            data = json.load(file)
-
-        for mahasiswa in data["mahasiswa"]:
-            table.insert(
-                "",
-                "end",
-                values=(
-                    mahasiswa["nama"],
-                    mahasiswa["kelas"],
-                    mahasiswa["jurusan"],
-                    mahasiswa["ipk"]
-                )
-            )
-
-    def input_data():
-        clear_content()
-
-        title = tk.Label(
-            content,
-            text="INPUT DATA MAHASISWA",
-            font=("Arial", 22, "bold"),
-            fg="black",
-            bg="white"
-        )
-        title.pack(pady=25)
-
-        form_frame = tk.Frame(
-            content,
-            bg="white"
-        )
-        form_frame.pack()
-
-        nama_label = tk.Label(
-            form_frame,
-            text="Nama",
-            font=("Arial", 11),
-            fg="black",
-            bg="white"
-        )
-        nama_label.grid(
-            row=0,
-            column=0,
-            sticky="w",
-            pady=10
-        )
-
-        nama_entry = tk.Entry(
-            form_frame,
-            width=30,
-            font=("Arial", 12)
-        )
-        nama_entry.grid(
-            row=0,
-            column=1,
-            padx=20,
-            pady=10
-        )
-
-        kelas_label = tk.Label(
-            form_frame,
-            text="Kelas",
-            font=("Arial", 11),
-            fg="black",
-            bg="white"
-        )
-        kelas_label.grid(
-            row=1,
-            column=0,
-            sticky="w",
-            pady=10
-        )
-
-        kelas_combo = ttk.Combobox(
-            form_frame,
-            width=28,
-            values=[
-                "A",
-                "B",
-                "C"
-            ],
-            state="readonly",
-            font=("Arial", 12)
-        )
-        kelas_combo.grid(
-            row=1,
-            column=1,
-            padx=20,
-            pady=10
-        )
-
-        jurusan_label = tk.Label(
-            form_frame,
-            text="Jurusan",
-            font=("Arial", 11),
-            fg="black",
-            bg="white"
-        )
-        jurusan_label.grid(
-            row=2,
-            column=0,
-            sticky="w",
-            pady=10
-        )
-
-        jurusan_combo = ttk.Combobox(
-            form_frame,
-            width=28,
-            values=[
-                "Sistem Informasi",
-                "Teknik Informatika",
-                "Bisnis Digital"
-            ],
-            state="readonly",
-            font=("Arial", 12)
-        )
-        jurusan_combo.grid(
-            row=2,
-            column=1,
-            padx=20,
-            pady=10
-        )
-
-        ipk_label = tk.Label(
-            form_frame,
-            text="IPK",
-            font=("Arial", 11),
-            fg="black",
-            bg="white"
-        )
-        ipk_label.grid(
-            row=3,
-            column=0,
-            sticky="w",
-            pady=10
-        )
-
-        ipk_entry = tk.Entry(
-            form_frame,
-            width=30,
-            font=("Arial", 12)
-        )
-        ipk_entry.grid(
-            row=3,
-            column=1,
-            padx=20,
-            pady=10
-        )
-
-        message_label = tk.Label(
-            content,
-            text="",
-            font=("Arial", 10),
-            fg="black",
-            bg="white"
-        )
-        message_label.pack(pady=5)
-
-        def save_data():
-            nama = nama_entry.get()
-            kelas = kelas_combo.get()
-            jurusan = jurusan_combo.get()
-            ipk = ipk_entry.get()
-
-            berhasil, message = add_mahasiswa(
-                nama,
-                kelas,
-                jurusan,
-                ipk
-            )
-
-            message_label.config(
-                text=message
-            )
-
-            if berhasil:
-                nama_entry.delete(0, tk.END)
-                kelas_combo.set("")
-                jurusan_combo.set("")
-                ipk_entry.delete(0, tk.END)
-
-        save_button = tk.Button(
-            content,
-            text="Simpan",
-            width=25,
-            height=2,
-            bg="#2196F3",
-            fg="white",
-            activebackground="#2196F3",
-            activeforeground="white",
-            font=("Arial", 10, "bold"),
-            command=save_data
-        )
-        save_button.pack(pady=20)
-
-    def menu_button(text, command):
-        button = tk.Button(
+    def menu_button(key, icon, text, command):
+        btn = tk.Button(
             sidebar,
-            text=text,
-            width=20,
+            text=f"   {icon}   {text}",
+            anchor="w",
+            width=22,
             height=2,
-            bg="#2196F3",
-            fg="white",
-            activebackground="#2196F3",
-            activeforeground="white",
+            bg=SIDEBAR_BG,
+            fg=TEXT_WHITE,
+            activebackground=SIDEBAR_ACTIVE,
+            activeforeground=TEXT_WHITE,
             relief="flat",
-            font=("Arial", 11, "bold"),
+            bd=0,
+            cursor="hand2",
+            font=font(11, "bold"),
             command=command
         )
-        button.pack(pady=5)
+        btn.pack(pady=3, padx=15)
 
-    menu_button(
-        "Input Data",
-        input_data
-    )
+        def on_enter(_event):
+            if btn.cget("bg") != SIDEBAR_ACTIVE:
+                btn.config(bg=SIDEBAR_HOVER)
 
-    menu_button(
-        "Show Data",
-        show_data
-    )
+        def on_leave(_event):
+            if btn.cget("bg") != SIDEBAR_ACTIVE:
+                btn.config(bg=SIDEBAR_BG)
+
+        btn.bind("<Enter>", on_enter)
+        btn.bind("<Leave>", on_leave)
+
+        menu_buttons[key] = btn
+        return btn
+
+    menu_button("input", "📝", "Input Data", show_input)
+    menu_button("data", "📋", "Show Data", show_data)
+
+    # ==================== EXIT BUTTON (RED) ====================
+
+    bottom_frame = tk.Frame(sidebar, bg=SIDEBAR_BG)
+    bottom_frame.pack(side="bottom", pady=25, fill="x", padx=15)
 
     exit_button = tk.Button(
-        sidebar,
-        text="Exit",
-        width=20,
+        bottom_frame,
+        text="   🚪   Exit",
+        anchor="w",
+        width=22,
         height=2,
-        bg="#2196F3",
-        fg="white",
-        activebackground="#2196F3",
-        activeforeground="white",
+        bg=DANGER,
+        fg=TEXT_WHITE,
+        activebackground=DANGER_DARK,
+        activeforeground=TEXT_WHITE,
         relief="flat",
-        font=("Arial", 11, "bold"),
+        bd=0,
+        cursor="hand2",
+        font=font(11, "bold"),
         command=window.destroy
     )
-    exit_button.pack(pady=20)
+    exit_button.pack(fill="x")
+    add_hover(exit_button, DANGER, DANGER_DARK)
 
     show_data()
 
