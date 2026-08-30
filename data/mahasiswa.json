@@ -43,25 +43,11 @@
             "ipk": 4.0
         },
         {
-            "nim": "1313123",
-            "nama": "dasad",
-            "kelas": "B",
-            "jurusan": "Teknik Informatika",
+            "nim": "1231412421",
+            "nama": "caesar",
+            "kelas": "A",
+            "jurusan": "Sistem Informasi",
             "ipk": 4.0
-        },
-        {
-            "nim": "12312313",
-            "nama": "dasdad",
-            "kelas": "B",
-            "jurusan": "Teknik Informatika",
-            "ipk": 3.0
-        },
-        {
-            "nim": "212313",
-            "nama": "sdadad",
-            "kelas": "B",
-            "jurusan": "Teknik Informatika",
-            "ipk": 3.0
         }
     ]
 }

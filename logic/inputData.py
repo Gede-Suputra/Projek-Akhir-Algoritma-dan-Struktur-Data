@@ -30,13 +30,16 @@ def check_input(nim, nama, kelas, jurusan, ipk):
         return False, "Jurusan harus berupa string"
 
     if not isinstance(ipk, str):
-        return False, "IPK harus berupa angka"
+        return False, "IPK harus berupa string"
 
     if not nim or not nama or not kelas or not jurusan or not ipk:
         return False, "Semua form harus diisi"
 
     if not nim.isdigit():
         return False, "NIM hanya boleh berupa angka"
+
+    if len(nim) < 5:
+        return False, "NIM harus terdiri dari minimal 5 digit"
 
     if not nama.replace(" ", "").isalpha():
         return False, "Nama hanya boleh berupa huruf"

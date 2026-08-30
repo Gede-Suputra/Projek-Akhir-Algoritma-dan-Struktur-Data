@@ -90,7 +90,7 @@ def setup_ttk_style():
         background="white",
         fieldbackground="white",
         foreground=TEXT_DARK,
-        rowheight=30,
+        rowheight=26,
         font=font(10),
         borderwidth=0
     )
@@ -100,7 +100,7 @@ def setup_ttk_style():
         foreground="white",
         font=font(10, "bold"),
         relief="flat",
-        padding=6
+        padding=4
     )
     style.map(
         "Treeview.Heading",
