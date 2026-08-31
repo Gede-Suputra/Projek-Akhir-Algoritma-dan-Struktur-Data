@@ -48,6 +48,13 @@
             "kelas": "A",
             "jurusan": "Sistem Informasi",
             "ipk": 4.0
+        },
+        {
+            "nim": "260040045",
+            "nama": "I Wayan Gede Suputra",
+            "kelas": "A",
+            "jurusan": "Teknik Informatika",
+            "ipk": 3.6
         }
     ]
 }
